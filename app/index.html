@@ -1,12 +1,35 @@
-<html>
+<html ng-app="app">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/angular.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
-    <h2>Index Page</h2>
+<body ng-controller="mainCtrl">
+    <div class="alert alert-success alert-dismissable" ng-repeat="alert in alerts">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="deleteNotify($index)">&times;</a>
+        {{alert.title}}
+    </div>
+
+    <script>
+        var app = angular.module('app', []);
+        var socket = io();
+
+        app.controller('mainCtrl', function($scope){
+            $scope.alerts = [];
+
+            $scope.deleteNotify = function(index) {
+                $scope.alerts.splice(index, 1);
+            }
+
+            socket.on('new contents', function(messages){
+                $scope.alerts.push(messages);
+                $scope.$digest();
+                console.log(messages)
+            });
+        });
+    </script>
 </body>
 </html>

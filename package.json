@@ -12,6 +12,8 @@
     "express": "^4.15.2",
     "feedparser": "^2.1.0",
     "feedsub": "^0.3.3",
-    "request": "^2.80.0"
+    "moment": "^2.17.1",
+    "request": "^2.80.0",
+    "socket.io": "^1.7.3"
   }
 }
