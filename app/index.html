@@ -8,9 +8,11 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body ng-controller="mainCtrl">
-    <div class="alert alert-success alert-dismissable" ng-repeat="alert in alerts">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="deleteNotify($index)">&times;</a>
-        {{alert.title}}
+    <div ng-repeat="alerts in alertsList">
+        <div class="alert alert-success alert-dismissable"  ng-repeat="alert in alerts">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="deleteNotify($index)">&times;</a>
+            {{alert.title}}
+        </div>
     </div>
 
     <script>
@@ -18,14 +20,14 @@
         var socket = io();
 
         app.controller('mainCtrl', function($scope){
-            $scope.alerts = [];
+            $scope.alertsList = [];
 
             $scope.deleteNotify = function(index) {
                 $scope.alerts.splice(index, 1);
             }
 
             socket.on('new contents', function(messages){
-                $scope.alerts.push(messages);
+                $scope.alertsList.push(messages);
                 $scope.$digest();
                 console.log(messages)
             });

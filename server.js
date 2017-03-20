@@ -11,6 +11,7 @@ app.use(function(req, res){
     res.sendFile(__dirname + "/app/index.html");
 });
 
+var firstRun = true;
 var FeedSub = require('feedsub');
 var rssMap = new Map();
 var urls = [
@@ -20,7 +21,7 @@ var urls = [
 ];
 
 io.on('connection', function(socket){
-
+    console.log("user connected");
     var runRSSSubServer = function(urls) {
         urls.forEach(function(url){
             var feedSub = new FeedSub(url, {
@@ -29,9 +30,13 @@ io.on('connection', function(socket){
                 forceInterval: true,
                 autoStart: true 
             });
-            feedSub.on('item', function(item) {
-                io.emit("new contents", item);
+            feedSub.on('items', function(items) {
+                if(!firstRun) {
+                    io.emit("new contents", items);
+                }
+                firstRun = false;
             });
+            
             rssMap.set(url, feedSub);
         });
     }
