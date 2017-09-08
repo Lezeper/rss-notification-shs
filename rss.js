@@ -4,6 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var moment = require('moment');
 
+require('./models');
+
 app.use(express.static(__dirname + "/app"));
 app.use(express.static(__dirname + "/public"));
 
@@ -15,10 +17,11 @@ var firstRun = true;
 var FeedSub = require('feedsub');
 var rssMap = new Map();
 var urls = [
-    // 'http://rss.cnn.com/rss/cnn_latest.rss',
-    // 'https://www.uscreditcardguide.com/en/feed/',
     'http://lorem-rss.herokuapp.com/feed?unit=second&interval=30'
 ];
+// TODO: store on the DB
+var userNotifyMap = new Map();
+
 
 io.on('connection', function(socket){
     console.log("user connected");
